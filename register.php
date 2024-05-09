@@ -18,6 +18,7 @@ if(isset($_SESSION["user"])) {
 <body>
     <div class="container">
         <?php
+//check if form already submit
         if(isset($_POST["submit"])) {
             $fullName = $_POST["fullname"];
             $email = $_POST["email"];
@@ -26,25 +27,28 @@ if(isset($_SESSION["user"])) {
 
             $passwordHash = password_hash($password, PASSWORD_DEFAULT); 
             $errors = array();
+            // Checks whether input has been entered or not
             if(empty($fullName) or empty($email) or empty($password) or empty($repeatPassword)) {
                 array_push($errors, "All of feilds are required!");
             }
-
+            // validate email data
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 array_push($errors, "Email is not valid");
             }
-
+            // validate password
             if(strlen($password) < 8) {
                 array_push($errors, "Password must be at least 8 chacracter long");
             }
-
+            // check whether password and repeatPassword is duplicate
             if($password !==$repeatPassword) {
                 array_push($errors, "Password does not match!");
             }
+
             require_once "database.php";
             $sql ="SELECT * FROM users WHERE email = '$email'";
             $result = mysqli_query($conn,$sql);
             $rowCount = mysqli_num_rows($result);
+            //check whether email has aldready exists
             if ($rowCount > 0) {
                 array_push($errors, "Email already exitsts");
             }
@@ -67,7 +71,9 @@ if(isset($_SESSION["user"])) {
             }
 
         }   
+        // form register 
         ?>
+  
         <form action="register.php" method="POST">
             <div class="group">
                 <input type="text" class="form-control" name="fullname" placeholder="FullName:">
@@ -84,6 +90,7 @@ if(isset($_SESSION["user"])) {
             <div class="form-btn">
                 <input type="submit" class="btn btn-primary" value="Register" name="submit">
             </div>
+            
     </form>
     <div><p>Already register <a href="login.php">Login</a></p></div>
     </div>

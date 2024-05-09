@@ -29,7 +29,7 @@ if(isset($_SESSION["user"])) {
             $errors = array();
             // Checks whether input has been entered or not
             if(empty($fullName) or empty($email) or empty($password) or empty($repeatPassword)) {
-                array_push($errors, "All of feilds are required!");
+                array_push($errors, "All of fields are required!");
             }
             // validate email data
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
